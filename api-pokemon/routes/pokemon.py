@@ -98,7 +98,7 @@ def buscar_por_nome(name_or_id):
     if user_id:
         status_db = PokemonUsuario.query.filter_by(IDUsuario=user_id, Codigo=codigo_pokemon).first()
 
-    return jsonify({"pokemons":{
+    return jsonify({
         "id": pokemon_id,
         "name": detalhe.get("name"),
         "codigo": codigo_pokemon,
@@ -106,7 +106,7 @@ def buscar_por_nome(name_or_id):
         "types": [t["type"]["name"] for t in detalhe.get("types", [])],
         "IsFav": status_db.Favorito if status_db else False,
         "IsTeamBattle": status_db.GrupoBatalha if status_db else False
-    }})
+    })
 # -----------------------------
 # Buscar por geracao
 # -----------------------------
@@ -178,7 +178,7 @@ def listar_favoritos():
         "idUsuario": f.IDUsuario,
         "idTipoPokemon": f.IDTipoPokemon,
         "codigo": f.Codigo,
-        "imagemUrl": f.ImagemUrl,
+        "imageUrl": f.ImagemUrl,
         "nome": f.Nome,
         "grupoBatalha": f.GrupoBatalha,
         "favorito": f.Favorito
@@ -195,7 +195,7 @@ def listar_campo_de_batalha():
         "idUsuario": f.IDUsuario,
         "idTipoPokemon": f.IDTipoPokemon,
         "codigo": f.Codigo,
-        "imagemUrl": f.ImagemUrl,
+        "imageUrl": f.ImagemUrl,
         "nome": f.Nome,
         "grupoBatalha": f.GrupoBatalha,
         "favorito": f.Favorito

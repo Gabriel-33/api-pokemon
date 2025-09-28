@@ -1,5 +1,6 @@
 from flask import Flask
 from extensions import db, jwt
+from flask_cors import CORS  # Importar CORS
 from routes.auth import auth_bp
 from routes.equipe import equipe_bp
 from routes.pokemon import pokemon_bp
@@ -11,6 +12,8 @@ import models
 # --------------- --------------------------------------------------
 
 app = Flask(__name__)
+
+CORS(app, origins=["http://localhost:4200"], supports_credentials=True)
 
 # Configurações
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pokemon.db'

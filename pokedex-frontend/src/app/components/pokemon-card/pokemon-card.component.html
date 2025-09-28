@@ -1,0 +1,32 @@
+<div class="pokemon-card card h-100">
+  <div class="card-body text-center">
+    <img [src]="pokemon.imageUrl" [alt]="pokemon.name" class="pokemon-img">
+    
+    <h5 class="card-title mt-3">{{ pokemon.name | titlecase }}</h5>
+    <p class="text-muted">#{{ pokemon.codigo }}</p>
+    
+    <div class="types mb-3">
+      <span *ngFor="let type of pokemon.types" 
+            class="type-badge" 
+            [class]="'type-' + type">
+        {{ type }}
+      </span>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-outline-danger btn-sm me-2"
+              (click)="toggleFavorite()"
+              [class.active]="pokemon.isFav"
+              title="Favorito">
+        <i class="fas fa-heart"></i>
+      </button>
+      
+      <button class="btn btn-outline-primary btn-sm"
+              (click)="toggleBattleTeam()"
+              [class.active]="pokemon.isTeamBattle"
+              title="Equipe de Batalha">
+        <i class="fas fa-users"></i>
+      </button>
+    </div>
+  </div>
+</div>

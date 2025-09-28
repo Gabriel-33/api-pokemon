@@ -19,7 +19,7 @@ export class PokemonApiService {
     });
   }
 
-  // 🔐 AUTENTICAÇÃO
+  // AUTENTICAÇÃO
   login(credentials: LoginData): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials);
   }
@@ -28,38 +28,38 @@ export class PokemonApiService {
     return this.http.post(`${this.apiUrl}/auth/register`, userData);
   }
 
-  // 🔍 POKÉMON
-  searchPokemon(query: string): Observable<{ pokemon: Pokemon }> {
-    return this.http.get<{ pokemon: Pokemon }>(`${this.apiUrl}/pokemon/search/${query}`);
+  //POKÉMON
+  searchPokemon(query: string): Observable<Pokemon> {
+    return this.http.get<Pokemon>(`${this.apiUrl}/pokemon/search/${query}`);
   }
 
   getPokemonByGeneration(generation: string): Observable<PokemonGeneration> {
     return this.http.get<PokemonGeneration>(`${this.apiUrl}/pokemon/generation/${generation}`);
   }
 
-  // ⭐ FAVORITOS
+  //FAVORITOS
   getFavorites(): Observable<Pokemon[]> {
-    return this.http.get<Pokemon[]>(`${this.apiUrl}/favoritos`, { 
+    return this.http.get<Pokemon[]>(`${this.apiUrl}/pokemon/favoritos`, { 
       headers: this.getAuthHeaders() 
     });
   }
 
   addFavorite(pokemonId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/favoritos`, 
+    return this.http.post(`${this.apiUrl}/pokemon/adicionarFavorito`, 
       { idPokemonUsuario: pokemonId }, 
       { headers: this.getAuthHeaders() }
     );
   }
 
   removeFavorite(pokemonId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/favoritos/${pokemonId}`, {
+    return this.http.delete(`${this.apiUrl}/pokemon/favoritos/${pokemonId}`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  // ⚔️ EQUIPE
+  // EQUIPE
   getBattleTeam(): Observable<Pokemon[]> {
-    return this.http.get<Pokemon[]>(`${this.apiUrl}/equipe`, {
+    return this.http.get<Pokemon[]>(`${this.apiUrl}/pokemon/favoritos`, {
       headers: this.getAuthHeaders()
     });
   }
