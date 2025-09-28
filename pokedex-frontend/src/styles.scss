@@ -1,0 +1,86 @@
+/* Importar Bootstrap */
+@import 'bootstrap/scss/bootstrap';
+
+/* Variáveis CSS */
+:root {
+  --primary-color: #dc3545;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  
+  /* Cores dos tipos Pokémon */
+  --type-grass: #78C850;
+  --type-fire: #F08030;
+  --type-water: #6890F0;
+  --type-electric: #F8D030;
+  --type-normal: #A8A878;
+  --type-fighting: #C03028;
+  --type-poison: #A040A0;
+  --type-ground: #E0C068;
+  --type-flying: #A890F0;
+  --type-psychic: #F85888;
+  --type-bug: #A8B820;
+  --type-rock: #B8A038;
+  --type-ghost: #705898;
+  --type-dragon: #7038F8;
+  --type-dark: #705848;
+  --type-steel: #B8B8D0;
+  --type-fairy: #EE99AC;
+  --type-ice: #98D8D8;
+}
+
+/* Estilos globais */
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Classes para tipos Pokémon */
+.type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 2px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  
+  &.type-grass { background: var(--type-grass); }
+  &.type-fire { background: var(--type-fire); }
+  &.type-water { background: var(--type-water); }
+  &.type-electric { background: var(--type-electric); }
+  &.type-normal { background: var(--type-normal); }
+  &.type-fighting { background: var(--type-fighting); }
+  &.type-poison { background: var(--type-poison); }
+  &.type-ground { background: var(--type-ground); }
+  &.type-flying { background: var(--type-flying); }
+  &.type-psychic { background: var(--type-psychic); }
+  &.type-bug { background: var(--type-bug); }
+  &.type-rock { background: var(--type-rock); }
+  &.type-ghost { background: var(--type-ghost); }
+  &.type-dragon { background: var(--type-dragon); }
+  &.type-dark { background: var(--type-dark); }
+  &.type-steel { background: var(--type-steel); }
+  &.type-fairy { background: var(--type-fairy); }
+  &.type-ice { background: var(--type-ice); }
+}
+
+/* Utilitários */
+.pokemon-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}

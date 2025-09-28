@@ -1,0 +1,93 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Pokemon } from '../../interfaces/pokemon';
+import { PokemonApiService } from '../../services/pokemon-api.service';
+import { PokemonCardComponent } from '../../components/pokemon-card/pokemon-card.component';
+
+@Component({
+  selector: 'app-favorites',
+  standalone: true,
+  imports: [CommonModule, RouterLink, PokemonCardComponent],
+  template: `
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-white text-center mb-4">
+            <i class="fas fa-heart text-danger me-3"></i>Meus Favoritos
+          </h1>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-light" style="width: 3rem; height: 3rem;"></div>
+        <p class="text-white mt-3">Carregando favoritos...</p>
+      </div>
+
+      <div *ngIf="!isLoading && favorites.length === 0" class="text-center py-5">
+        <div class="card">
+          <div class="card-body py-5">
+            <i class="fas fa-heart-broken fa-3x text-muted mb-3"></i>
+            <h3 class="text-muted">Nenhum favorito ainda</h3>
+            <p class="text-muted">Adicione Pokémon aos favoritos clicando no coração!</p>
+            <a routerLink="/pokemons" class="btn btn-primary">
+              <i class="fas fa-search me-2"></i>Explorar Pokémon
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && favorites.length > 0" class="row g-4">
+        <div class="col-12 text-center mb-3">
+          <span class="badge bg-danger fs-6">
+            {{ favorites.length }} Pokémon(s) favoritado(s)
+          </span>
+        </div>
+        
+        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2" 
+             *ngFor="let pokemon of favorites">
+          <app-pokemon-card 
+            [pokemon]="pokemon"
+            (favoriteToggled)="onFavoriteToggled($event)"
+            (battleTeamToggled)="onBattleTeamToggled($event)">
+          </app-pokemon-card>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class FavoritesComponent implements OnInit {
+  favorites: Pokemon[] = [];
+  isLoading = false;
+
+  constructor(private pokemonApi: PokemonApiService) {}
+
+  ngOnInit(): void {
+    this.loadFavorites();
+  }
+
+  loadFavorites(): void {
+    this.isLoading = true;
+    this.pokemonApi.getFavorites().subscribe({
+      next: (favorites) => {
+        this.favorites = favorites;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar favoritos:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onFavoriteToggled(pokemon: Pokemon): void {
+    this.favorites = this.favorites.filter(p => p.id !== pokemon.id);
+  }
+
+  onBattleTeamToggled(pokemon: Pokemon): void {
+    const index = this.favorites.findIndex(p => p.id === pokemon.id);
+    if (index !== -1) {
+      this.favorites[index] = { ...pokemon };
+    }
+  }
+}
