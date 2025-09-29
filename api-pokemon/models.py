@@ -33,9 +33,9 @@ class PokemonUsuario(db.Model):
     # CORREÇÃO FINAL: Referenciando a tabela 'tipo_pokemon' em snake_case
     IDTipoPokemon = db.Column(db.Integer, db.ForeignKey("tipo_pokemon.IDTipoPokemon"), nullable=False)
     
-    Codigo = db.Column(db.String(120), unique=True, nullable=False)
-    ImagemUrl = db.Column(db.String(120), unique=True, nullable=False)
-    Nome = db.Column(db.String(120), unique=True, nullable=False)
+    Codigo = db.Column(db.String(120), unique=False, nullable=False)
+    ImagemUrl = db.Column(db.String(120), unique=False, nullable=False)
+    Nome = db.Column(db.String(120), unique=False, nullable=False)
     
     GrupoBatalha = db.Column(db.Boolean, nullable=False)
     Favorito = db.Column(db.Boolean, nullable=False)

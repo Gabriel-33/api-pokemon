@@ -174,12 +174,12 @@ def listar_favoritos():
     usuario_id = int(get_jwt_identity())
     favs = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, Favorito=True).all()
     return jsonify([{
-        "idPokemonUsuario": f.IDPokemonUsuario,
+        "id": f.IDPokemonUsuario,
         "idUsuario": f.IDUsuario,
         "idTipoPokemon": f.IDTipoPokemon,
         "codigo": f.Codigo,
         "imageUrl": f.ImagemUrl,
-        "nome": f.Nome,
+        "name": f.Nome,
         "IsTeamBattle": f.GrupoBatalha,
         "IsFav": f.Favorito
     } for f in favs])
@@ -196,7 +196,7 @@ def listar_campo_de_batalha():
         "idTipoPokemon": f.IDTipoPokemon,
         "codigo": f.Codigo,
         "imageUrl": f.ImagemUrl,
-        "nome": f.Nome,
+        "name": f.Nome,
         "IsTeamBattle": f.GrupoBatalha,
         "IsFav": f.Favorito
     } for f in battle])
@@ -216,8 +216,8 @@ def adicionar_favorito():
 
     existing = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, Codigo=data["codigo"]).first()
     if existing:
-        existing.Favorito = data.get("favorito", True)
-        existing.GrupoBatalha = data.get("grupoBatalha", False)
+        print(existing.Favorito)
+        existing.Favorito = True
         db.session.commit()
         return jsonify({"msg": "Favorito atualizado!"})
 
@@ -238,15 +238,15 @@ def adicionar_favorito():
 # -----------------------------
 # Remover favorito
 # -----------------------------
-@pokemon_bp.route("/<int:id_pokemon_usuario>", methods=["DELETE"])
+@pokemon_bp.route("remover_favorito/<string:id_pokemon_usuario>", methods=["DELETE"])
 @jwt_required()
 def remover_favorito(id_pokemon_usuario):
     usuario_id = int(get_jwt_identity())
-    fav = PokemonUsuario.query.filter_by(IDPokemonUsuario=id_pokemon_usuario, IDUsuario=usuario_id).first()
+    fav = PokemonUsuario.query.filter_by(Codigo=id_pokemon_usuario, IDUsuario=usuario_id).first()
 
     if not fav:
         return jsonify({"msg": "Favorito não encontrado"}), 404
-
+    print(fav)
     fav.Favorito = False
     db.session.commit()
     return jsonify({"msg": "Favorito removido!"})
@@ -279,12 +279,12 @@ def adicionar_campo_batalha():
     usuario_id = int(get_jwt_identity())
     data = request.get_json()
 
-    if not data or "idTipoPokemon" not in data or "codigo" not in data or "imagemUrl" not in data or "nome" not in data:
+    if not data or "idPokemonUsuario" not in data or "codigo" not in data or "imagemUrl" not in data or "nome" not in data:
         return jsonify({"msg": "Dados incompletos"}), 400
 
-    existing = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, Codigo=data["codigo"]).first()
+    existing = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, IDPokemonUsuario=data["idPokemonUsuario"]).first()
     if existing:
-        existing.Favorito = data.get("favorito", False)
+        print(existing)
         existing.GrupoBatalha = data.get("grupoBatalha", True)
         db.session.commit()
         return jsonify({"msg": "Campo de batalha atualizado!"})

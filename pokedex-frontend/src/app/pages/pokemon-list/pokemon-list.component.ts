@@ -71,22 +71,29 @@ export class PokemonListComponent implements OnInit {
   }
 
   onFavoriteToggled(pokemon: Pokemon): void {
-    const index = this.pokemons.findIndex(p => p.id === pokemon.id);
-
-    const payload = {
-      idTipoPokemon: pokemon.id,
-      codigo: pokemon.id.toString().padStart(3, '0'),
-      imagemUrl: pokemon.imageUrl,
-      nome: pokemon.name,
-      favorito: true,
-      grupoBatalha: false
-    };
-
+    const index = this.pokemons.findIndex(p => p.codigo === pokemon.codigo);
+    console.log(pokemon.id)
     if (index !== -1) {
       this.pokemons[index] = { ...pokemon };
       try {
-        this.pokemonApi.addFavorite(payload).subscribe();
-        alert("Pokemon adicionado aos favoritos!");
+        if(pokemon.IsFav == true){
+          this.pokemonApi.removeFavorite(pokemon.id.toString().padStart(3, '0')).subscribe();
+          alert("Pokemon removido dos favoritos!");
+        }else{
+          const payload = {
+            idTipoPokemon: pokemon.id,
+            idPokemonUsuario: pokemon.id,
+            codigo: pokemon.id.toString().padStart(3, '0'),
+            imagemUrl: pokemon.imageUrl,
+            nome: pokemon.name,
+            favorito: true,
+            grupoBatalha: pokemon.IsTeamBattle == true ? false : true
+          };
+
+          this.pokemonApi.addFavorite(payload).subscribe();
+          alert("Pokemon adicionado aos favoritos!");
+        }
+        this.loadGeneration(this.selectedGeneration);
       } catch (error) {
         
       }
@@ -98,19 +105,21 @@ export class PokemonListComponent implements OnInit {
     const index = this.pokemons.findIndex(p => p.id === pokemon.id);
 
     const payload = {
-      idTipoPokemon: pokemon.id,
+      idPokemonUsuario: pokemon.id,
       codigo: pokemon.id.toString().padStart(3, '0'),
       imagemUrl: pokemon.imageUrl,
       nome: pokemon.name,
       favorito: pokemon.IsFav,
-      grupoBatalha: true
+      grupoBatalha: pokemon.IsTeamBattle == true ? false : true
     };
 
     if (index !== -1) {
       this.pokemons[index] = { ...pokemon };
       try {
         this.pokemonApi.addToBattleTeam(payload).subscribe();
-        alert("Pokemon adicionado ao campo de batalha!");
+        pokemon.IsTeamBattle == true ? alert("Pokemon removido do campo de batalha!")
+        :alert("Pokemon adicionado ao campo de batalha!");
+        this.loadGeneration(this.selectedGeneration);
       } catch (error) {
         
       }

@@ -53,8 +53,8 @@ export class PokemonApiService {
     );
   }
 
-  removeFavorite(pokemonId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/pokemon/favoritos/${pokemonId}`, {
+  removeFavorite(pokemonId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/pokemon/remover_favorito/${pokemonId}`, {
       headers: this.getAuthHeaders()
     });
   }
