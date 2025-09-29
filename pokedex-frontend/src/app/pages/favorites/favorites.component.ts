@@ -42,7 +42,7 @@ export class FavoritesComponent implements OnInit {
     if (index !== -1) {
       this.favorites[index] = { ...pokemon };
       try {
-        this.pokemonApi.removeFavorite(pokemon.id.toString().padStart(3, '0')).subscribe();
+        this.pokemonApi.removeFavorite(pokemon.id.toString().padStart(3, '0'));
         alert("Pokemon removido dos favoritos!");
         this.loadFavorites();
       } catch (error) {
@@ -57,6 +57,7 @@ export class FavoritesComponent implements OnInit {
 
     const payload = {
       idPokemonUsuario: pokemon.id,
+      idTipoPokemon: pokemon.id,
       codigo: pokemon.id.toString().padStart(3, '0'),
       imagemUrl: pokemon.imageUrl,
       nome: pokemon.name,
@@ -67,7 +68,7 @@ export class FavoritesComponent implements OnInit {
     if (index !== -1) {
       this.favorites[index] = { ...pokemon };
       try {
-        this.pokemonApi.addToBattleTeam(payload).subscribe();
+        this.pokemonApi.addToBattleTeam(payload);
         pokemon.IsTeamBattle == true ? alert("Pokemon removido do campo de batalha!")
         :alert("Pokemon adicionado ao campo de batalha!");
         this.loadFavorites();

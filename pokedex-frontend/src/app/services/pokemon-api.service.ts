@@ -73,8 +73,8 @@ export class PokemonApiService {
     );
   }
 
-  removeFromBattleTeam(pokemonId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/equipe/${pokemonId}`, {
+  removeFromBattleTeam(pokemonId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/pokemon/remover_pleyer/${pokemonId}`, {
       headers: this.getAuthHeaders()
     });
   }

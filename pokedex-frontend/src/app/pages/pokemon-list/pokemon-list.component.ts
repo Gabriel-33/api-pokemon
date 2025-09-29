@@ -103,9 +103,10 @@ export class PokemonListComponent implements OnInit {
 
   onBattleTeamToggled(pokemon: Pokemon): void {
     const index = this.pokemons.findIndex(p => p.id === pokemon.id);
-
+    
     const payload = {
       idPokemonUsuario: pokemon.id,
+      idTipoPokemon: pokemon.id,
       codigo: pokemon.id.toString().padStart(3, '0'),
       imagemUrl: pokemon.imageUrl,
       nome: pokemon.name,
@@ -116,9 +117,13 @@ export class PokemonListComponent implements OnInit {
     if (index !== -1) {
       this.pokemons[index] = { ...pokemon };
       try {
-        this.pokemonApi.addToBattleTeam(payload).subscribe();
-        pokemon.IsTeamBattle == true ? alert("Pokemon removido do campo de batalha!")
-        :alert("Pokemon adicionado ao campo de batalha!");
+        if(pokemon.IsTeamBattle == true){
+          this.pokemonApi.removeFromBattleTeam(pokemon.id.toString().padStart(3, '0')).subscribe();
+          alert("Pokemon removido do campo de batalha!")
+        }else{
+          this.pokemonApi.addToBattleTeam(payload).subscribe(); 
+          alert("Pokemon adicionado ao campo de batalha!");
+        }
         this.loadGeneration(this.selectedGeneration);
       } catch (error) {
         
