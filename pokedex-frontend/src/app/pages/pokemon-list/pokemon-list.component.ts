@@ -96,8 +96,25 @@ export class PokemonListComponent implements OnInit {
 
   onBattleTeamToggled(pokemon: Pokemon): void {
     const index = this.pokemons.findIndex(p => p.id === pokemon.id);
+
+    const payload = {
+      idTipoPokemon: pokemon.id,
+      codigo: pokemon.id.toString().padStart(3, '0'),
+      imagemUrl: pokemon.imageUrl,
+      nome: pokemon.name,
+      favorito: pokemon.IsFav,
+      grupoBatalha: true
+    };
+
     if (index !== -1) {
       this.pokemons[index] = { ...pokemon };
+      try {
+        this.pokemonApi.addToBattleTeam(payload).subscribe();
+        alert("Pokemon adicionado ao campo de batalha!");
+      } catch (error) {
+        
+      }
+        
     }
   }
 }

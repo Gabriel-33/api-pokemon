@@ -72,6 +72,12 @@
       &:hover:not(.active) {
         transform: scale(1.1);
       }
+
+      &.active-battle {
+        background-color: #3583dc;
+        border-color: #3583dc;
+        color: white;
+      }
     }
   }
 }

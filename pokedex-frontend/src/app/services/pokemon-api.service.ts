@@ -34,7 +34,9 @@ export class PokemonApiService {
   }
 
   getPokemonByGeneration(generation: string): Observable<PokemonGeneration> {
-    return this.http.get<PokemonGeneration>(`${this.apiUrl}/pokemon/generation/${generation}`);
+    return this.http.get<PokemonGeneration>(`${this.apiUrl}/pokemon/generation/${generation}`,{
+      headers: this.getAuthHeaders() 
+    });
   }
 
   //FAVORITOS
@@ -59,14 +61,14 @@ export class PokemonApiService {
 
   // EQUIPE
   getBattleTeam(): Observable<Pokemon[]> {
-    return this.http.get<Pokemon[]>(`${this.apiUrl}/pokemon/favoritos`, {
+    return this.http.get<Pokemon[]>(`${this.apiUrl}/pokemon/campoBatalha`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  addToBattleTeam(pokemonId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/equipe`,
-      { idPokemonUsuario: pokemonId },
+  addToBattleTeam(payload: object): Observable<any> {
+    return this.http.post(`${this.apiUrl}/pokemon/adicionarCampoBatalha`, 
+      payload, 
       { headers: this.getAuthHeaders() }
     );
   }

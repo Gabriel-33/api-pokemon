@@ -180,8 +180,8 @@ def listar_favoritos():
         "codigo": f.Codigo,
         "imageUrl": f.ImagemUrl,
         "nome": f.Nome,
-        "grupoBatalha": f.GrupoBatalha,
-        "favorito": f.Favorito
+        "IsTeamBattle": f.GrupoBatalha,
+        "IsFav": f.Favorito
     } for f in favs])
 
 
@@ -197,8 +197,8 @@ def listar_campo_de_batalha():
         "codigo": f.Codigo,
         "imageUrl": f.ImagemUrl,
         "nome": f.Nome,
-        "grupoBatalha": f.GrupoBatalha,
-        "favorito": f.Favorito
+        "IsTeamBattle": f.GrupoBatalha,
+        "IsFav": f.Favorito
     } for f in battle])
 
 
@@ -269,3 +269,35 @@ def alternar_favorito(id_pokemon_usuario):
 
     status = "favoritado" if fav.Favorito else "desfavoritado"
     return jsonify({"msg": f"Pokemon {status}!", "favorito": fav.Favorito})
+
+# -----------------------------
+# Adicionar favorito
+# -----------------------------
+@pokemon_bp.route("/adicionarCampoBatalha", methods=["POST"])
+@jwt_required()
+def adicionar_campo_batalha():
+    usuario_id = int(get_jwt_identity())
+    data = request.get_json()
+
+    if not data or "idTipoPokemon" not in data or "codigo" not in data or "imagemUrl" not in data or "nome" not in data:
+        return jsonify({"msg": "Dados incompletos"}), 400
+
+    existing = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, Codigo=data["codigo"]).first()
+    if existing:
+        existing.Favorito = data.get("favorito", False)
+        existing.GrupoBatalha = data.get("grupoBatalha", True)
+        db.session.commit()
+        return jsonify({"msg": "Campo de batalha atualizado!"})
+
+    novo = PokemonUsuario(
+        IDUsuario=usuario_id,
+        IDTipoPokemon=data["idTipoPokemon"],
+        Codigo=data["codigo"],
+        ImagemUrl=data["imagemUrl"],
+        Nome=data["nome"],
+        GrupoBatalha=True,
+        Favorito=data["favorito"]
+    )
+    db.session.add(novo)
+    db.session.commit()
+    return jsonify({"msg": "Campo de batalha adicionado!", "id": novo.IDPokemonUsuario})
