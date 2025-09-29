@@ -30,7 +30,9 @@ export class PokemonApiService {
 
   //POKÉMON
   searchPokemon(query: string): Observable<Pokemon> {
-    return this.http.get<Pokemon>(`${this.apiUrl}/pokemon/search/${query}`);
+    return this.http.get<Pokemon>(`${this.apiUrl}/pokemon/search/${query}`,{
+      headers: this.getAuthHeaders()
+    });
   }
 
   getPokemonByGeneration(generation: string): Observable<PokemonGeneration> {

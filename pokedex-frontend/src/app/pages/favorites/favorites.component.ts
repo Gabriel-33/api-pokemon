@@ -36,13 +36,13 @@ export class FavoritesComponent implements OnInit {
     });
   }
 
-  onFavoriteToggled(pokemon: Pokemon): void {
+  async onFavoriteToggled(pokemon: Pokemon): Promise<void> {
     const index = this.favorites.findIndex(p => p.codigo === pokemon.codigo);
-    
+    console.log(pokemon.codigo)
     if (index !== -1) {
       this.favorites[index] = { ...pokemon };
       try {
-        this.pokemonApi.removeFavorite(pokemon.id.toString().padStart(3, '0'));
+        await this.pokemonApi.removeFavorite(pokemon.codigo).subscribe();
         alert("Pokemon removido dos favoritos!");
         this.loadFavorites();
       } catch (error) {
@@ -52,25 +52,29 @@ export class FavoritesComponent implements OnInit {
     }
   }
 
-  onBattleTeamToggled(pokemon: Pokemon): void {
-    const index = this.favorites.findIndex(p => p.id === pokemon.id);
-
+  async onBattleTeamToggled(pokemon: Pokemon): Promise<void> {
+    const index = this.favorites.findIndex(p => p.codigo === pokemon.codigo);
+    
     const payload = {
       idPokemonUsuario: pokemon.id,
       idTipoPokemon: pokemon.id,
-      codigo: pokemon.id.toString().padStart(3, '0'),
+      codigo: pokemon.codigo,
       imagemUrl: pokemon.imageUrl,
       nome: pokemon.name,
       favorito: true,
       grupoBatalha: pokemon.IsTeamBattle == true ? false : true
     };
-
+    
     if (index !== -1) {
       this.favorites[index] = { ...pokemon };
       try {
-        this.pokemonApi.addToBattleTeam(payload);
-        pokemon.IsTeamBattle == true ? alert("Pokemon removido do campo de batalha!")
-        :alert("Pokemon adicionado ao campo de batalha!");
+        if(pokemon.IsTeamBattle == true){
+          await this.pokemonApi.removeFromBattleTeam(pokemon.codigo).subscribe();
+          alert("Pokemon removido do campo de batalha!")
+        }else{
+          await this.pokemonApi.addToBattleTeam(payload).subscribe(); 
+          alert("Pokemon adicionado ao campo de batalha!");
+        }
         this.loadFavorites();
       } catch (error) {
         
