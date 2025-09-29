@@ -72,10 +72,25 @@ export class PokemonListComponent implements OnInit {
 
   onFavoriteToggled(pokemon: Pokemon): void {
     const index = this.pokemons.findIndex(p => p.id === pokemon.id);
+
+    const payload = {
+      idTipoPokemon: pokemon.id,
+      codigo: pokemon.id.toString().padStart(3, '0'),
+      imagemUrl: pokemon.imageUrl,
+      nome: pokemon.name,
+      favorito: true,
+      grupoBatalha: false
+    };
+
     if (index !== -1) {
       this.pokemons[index] = { ...pokemon };
-
-        this.pokemonApi.addFavorite(index).subscribe();
+      try {
+        this.pokemonApi.addFavorite(payload).subscribe();
+        alert("Pokemon adicionado aos favoritos!");
+      } catch (error) {
+        
+      }
+        
     }
   }
 

@@ -44,9 +44,9 @@ export class PokemonApiService {
     });
   }
 
-  addFavorite(pokemonId: number): Observable<any> {
+  addFavorite(payload: object): Observable<any> {
     return this.http.post(`${this.apiUrl}/pokemon/adicionarFavorito`, 
-      { idPokemonUsuario: pokemonId }, 
+      payload, 
       { headers: this.getAuthHeaders() }
     );
   }

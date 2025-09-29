@@ -16,14 +16,14 @@
     <div class="actions">
       <button class="btn btn-outline-danger btn-sm me-2"
               (click)="toggleFavorite()"
-              [class.active]="pokemon.isFav"
-              title="Favorito">
-        <i class="fas fa-heart"></i>
+              [class.active]="pokemon.IsFav"
+              title="{{ pokemon.IsFav ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}">
+        <i class="fas fa-heart" [class.text-danger]="pokemon.IsFav"></i>
       </button>
       
       <button class="btn btn-outline-primary btn-sm"
               (click)="toggleBattleTeam()"
-              [class.active]="pokemon.isTeamBattle"
+              [class.active]="pokemon.IsTeamBattle"
               title="Equipe de Batalha">
         <i class="fas fa-users"></i>
       </button>

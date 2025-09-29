@@ -4,8 +4,8 @@ export interface Pokemon {
   codigo: string;
   imageUrl: string;
   types: string[];
-  isFav: boolean;
-  isTeamBattle: boolean;
+  IsFav: boolean;
+  IsTeamBattle: boolean;
 }
 
 export interface PokemonGeneration {
