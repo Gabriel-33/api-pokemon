@@ -101,7 +101,7 @@ export class PokemonListComponent implements OnInit {
     }
   }
 
-  onBattleTeamToggled(pokemon: Pokemon): void {
+  async onBattleTeamToggled(pokemon: Pokemon): Promise<void> {
     const index = this.pokemons.findIndex(p => p.id === pokemon.id);
     
     const payload = {
@@ -118,15 +118,23 @@ export class PokemonListComponent implements OnInit {
       this.pokemons[index] = { ...pokemon };
       try {
         if(pokemon.IsTeamBattle == true){
-          this.pokemonApi.removeFromBattleTeam(pokemon.id.toString().padStart(3, '0')).subscribe();
+          await this.pokemonApi.removeFromBattleTeam(pokemon.id.toString().padStart(3, '0')).toPromise();
           alert("Pokemon removido do campo de batalha!")
+          this.loadGeneration(this.selectedGeneration);
         }else{
-          this.pokemonApi.addToBattleTeam(payload).subscribe(); 
+          await this.pokemonApi.addToBattleTeam(payload).toPromise(); 
           alert("Pokemon adicionado ao campo de batalha!");
+          this.loadGeneration(this.selectedGeneration);
         }
-        this.loadGeneration(this.selectedGeneration);
       } catch (error) {
-        
+        const httpError = error as { 
+          error?: { 
+            msg?: string 
+          } 
+        };
+
+        const errorMessage = httpError.error?.msg || "Erro ao processar solicitação";
+        alert(errorMessage)
       }
         
     }

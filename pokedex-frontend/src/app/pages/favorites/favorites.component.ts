@@ -69,15 +69,22 @@ export class FavoritesComponent implements OnInit {
       this.favorites[index] = { ...pokemon };
       try {
         if(pokemon.IsTeamBattle == true){
-          await this.pokemonApi.removeFromBattleTeam(pokemon.codigo).subscribe();
+          await this.pokemonApi.removeFromBattleTeam(pokemon.codigo).toPromise();
           alert("Pokemon removido do campo de batalha!")
         }else{
-          await this.pokemonApi.addToBattleTeam(payload).subscribe(); 
+          await this.pokemonApi.addToBattleTeam(payload).toPromise(); 
           alert("Pokemon adicionado ao campo de batalha!");
         }
         this.loadFavorites();
       } catch (error) {
-        
+        const httpError = error as { 
+          error?: { 
+            msg?: string 
+          } 
+        };
+
+        const errorMessage = httpError.error?.msg || "Erro ao processar solicitação";
+        alert(errorMessage)
       }
         
     }

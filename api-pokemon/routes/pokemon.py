@@ -221,7 +221,7 @@ def adicionar_favorito():
         existing.Favorito = True
         db.session.commit()
         return jsonify({"msg": "Favorito atualizado!"})
-    
+
     novo = PokemonUsuario(
         IDUsuario=usuario_id,
         IDTipoPokemon=data["idTipoPokemon"],
@@ -282,6 +282,14 @@ def adicionar_campo_batalha():
     if not data or "idPokemonUsuario" not in data or "codigo" not in data or "imagemUrl" not in data or "nome" not in data:
         return jsonify({"msg": "Dados incompletos"}), 400
 
+    equipe_count = PokemonUsuario.query.filter(
+        PokemonUsuario.IDUsuario == usuario_id,
+        PokemonUsuario.GrupoBatalha == True
+    ).count()
+    
+    if equipe_count >= 6:
+        return jsonify({"msg": "A equipe já tem 6 Pokémon. Remova um para adicionar outro."}), 400
+    
     existing = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, Codigo=data["codigo"]).first()
     if existing:
         existing.GrupoBatalha = True
