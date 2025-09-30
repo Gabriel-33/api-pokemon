@@ -192,7 +192,7 @@ def listar_campo_de_batalha():
     usuario_id = int(get_jwt_identity())
     battle = PokemonUsuario.query.filter_by(IDUsuario=usuario_id, GrupoBatalha=True).all()
     return jsonify([{
-        "idPokemonUsuario": f.IDPokemonUsuario,
+        "id": f.IDPokemonUsuario,
         "idUsuario": f.IDUsuario,
         "idTipoPokemon": f.IDTipoPokemon,
         "codigo": f.Codigo,
@@ -221,7 +221,7 @@ def adicionar_favorito():
         existing.Favorito = True
         db.session.commit()
         return jsonify({"msg": "Favorito atualizado!"})
-
+    
     novo = PokemonUsuario(
         IDUsuario=usuario_id,
         IDTipoPokemon=data["idTipoPokemon"],
